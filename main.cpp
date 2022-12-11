@@ -4,7 +4,7 @@
 #include <cctype>
 #include <string>
 #include <stack>
-
+#include <cmath>
 
 
 
@@ -28,6 +28,7 @@ enum class Arity
 };
 
 
+// Структура описывающая лексему
 struct Token
 {
 	TypeToken type = TypeToken::DEFAULT;
@@ -40,6 +41,7 @@ struct Token
 	Token() {}
 	Token(TypeToken t, std::string n, int v = 0, Arity a = Arity::DEFAULT) : type{ t }, name{ n }, value{ v }, arity{ a } {}
 };
+
 
 std::vector<std::string> Separation(std::string str)
 {
@@ -87,7 +89,6 @@ std::vector<std::string> Separation(std::string str)
 
 	return tokens;
 }
-
 bool isConst(std::string token)
 {
 	if (token.size() == 1 && token[0] == '0') return true;
@@ -132,7 +133,6 @@ bool isCloseBracket(std::string token)
 
 
 
-
 class Record
 {
 private:
@@ -141,44 +141,46 @@ private:
 
 public:
 	Record() {}
-	Record(const std::string str) : srcStr{ str }
+	Record(const std::string& str) : srcStr{ str }
 	{
 		std::vector<std::string> strTokens = Separation(str);
 
 		for (auto& token : strTokens)
 		{
+			// Проверка на тип CONST
 			if (isConst(token))
 			{
 				tokens.emplace_back(Token(TypeToken::CONST, token, std::atoi(token.c_str())));
 			}
-
+			// Проверка на тип VARIABLE
 			else if (isVariable(token))
 			{
 				tokens.emplace_back(Token(TypeToken::VARIABLE, token));
 			}
-
+			// Проверка на тип OPERATION
 			else if (isOperation(token))
 			{
 				int priority = (token == "+" || token == "-") ? 1 : ((token == "^") ? 3 : 2);
-				tokens.emplace_back(Token(TypeToken::VARIABLE, token, priority));
+				tokens.emplace_back(Token(TypeToken::OPERATION, token, priority));
 			}
-
+			// Проверка на тип OPEN_BRACKET
 			else if (isOpenBracket(token))
 			{
 				tokens.emplace_back(Token(TypeToken::OPEN_BRACKET, token));
 			}
-
+			// Проверка на тип CLOSE_BRACKET
 			else if (isCloseBracket(token))
 			{
 				tokens.emplace_back(Token(TypeToken::CLOSE_BRACKET, token));
 			}
+			// Если тип не определен (некорректное значение)
 			else throw - 1;
 		}
 	}
 	Record(const Record& other) : srcStr(other.srcStr), tokens{ other.tokens } {}
 
 
-	size_t GetCountTokens() const noexcept { return tokens.size(); }
+	size_t GetCount() const noexcept { return tokens.size(); }
 	std::string  GetSrcString() const noexcept { return srcStr; }
 
 	Record& operator = (const Record& other)
@@ -190,7 +192,7 @@ public:
 
 		return *this;
 	}
-	Record& operator = (const std::string str)
+	Record& operator = (const std::string& str)
 	{
 		if (str == srcStr) return *this;
 
@@ -199,32 +201,211 @@ public:
 
 		return *this;
 	}
-	Token& operator [] (const size_t& pos)
-	{
-		return tokens.at(pos);
-	}
+	Token& operator [] (const size_t& pos) { return tokens.at(pos); }
 };
 
 
 
 
 
-class Poliz
+class Calculator
 {
 private:
-	Record recordTokens;
+	Record tokens;
 	std::map<std::string, int> tableVariable;
 	std::vector<Token> postForm;
-	std::stack<Token> stOperation;
-
 	std::string polStr;
+	int result;
+
+private:
+	void GenerationPostForm()
+	{
+		std::stack<Token> stOperation;
+
+		for (size_t i = 0; i < tokens.GetCount(); ++i)
+		{
+			// Если лексема переменная или константа
+			if (tokens[i].type == TypeToken::VARIABLE || tokens[i].type == TypeToken::CONST)
+			{
+				postForm.emplace_back(tokens[i]);
+				tableVariable[tokens[i].name] = tokens[i].value;
+			}
+			// Если лексема открывающая скобка
+			else if (tokens[i].type == TypeToken::OPEN_BRACKET)
+			{
+				stOperation.push(tokens[i]);
+			}
+			// Если лексема закрывающая скобка
+			else if (tokens[i].type == TypeToken::CLOSE_BRACKET)
+			{
+				while (!(stOperation.top().type == TypeToken::OPEN_BRACKET))
+				{
+					postForm.emplace_back(stOperation.top());
+					stOperation.pop();
+				}
+
+				stOperation.pop();
+			}
+			// Если лексема операция
+			else if (tokens[i].type == TypeToken::OPERATION)
+			{
+				if (tokens[i].name == "+" || tokens[i].name == "-")
+				{
+					if (i == 0 || tokens[i - 1].type == TypeToken::OPEN_BRACKET)
+					{
+						tokens[i].arity = Arity::UNARY;
+					}
+				}
+
+				while (!stOperation.empty() && tokens[i].value <= stOperation.top().value)
+				{
+					postForm.emplace_back(stOperation.top());
+					stOperation.pop();
+				}
+
+				stOperation.push(tokens[i]);
+			}
+		}
+
+		while (!stOperation.empty())
+		{
+			postForm.emplace_back(stOperation.top());
+			stOperation.pop();
+		}
+
+		for (const auto& token : postForm)
+		{
+			polStr += token.name;
+			polStr += ' ';
+		}
+		polStr = polStr.substr(0, polStr.size() - 1);
+	}
+	void CopyOther(const Calculator& other)
+	{
+		tokens = other.tokens;
+		tableVariable = other.tableVariable;
+		postForm = other.postForm;
+		polStr = other.polStr;
+		result = other.result;
+	}
 
 public:
+	Calculator(const std::string& str) : tokens{ str }
+	{
+		GenerationPostForm();
+		Calculation();		
+	}
+	Calculator(const Calculator& other) { CopyOther(other); }
 
 
+	std::string GetPolStr() const noexcept { return polStr; }
+	int GetResult() const noexcept { return result; }
+	int GetValVar(const std::string& name)
+	{
+		if (tableVariable.find(name) == tableVariable.end())
+			throw - 2;
+
+		return tableVariable[name];
+	}
+	const std::map<std::string, int>& GetTableVar() const noexcept
+	{
+		return tableVariable;
+	}
 
 
-		
+	void SetValVar(std::string name, int value)
+	{
+		if (tableVariable.find(name) == tableVariable.end())
+			throw - 2;
+
+		tableVariable[name] = value;
+	}	
+
+
+	void Calculation()
+	{
+		std::stack<int> stVariable;
+		int left{};
+		int right{};
+
+		for (const auto& token : postForm)
+		{
+			// Если лексема переменная или константа
+			if (token.type == TypeToken::CONST || token.type == TypeToken::VARIABLE)
+			{
+				stVariable.push(tableVariable[token.name]);
+			}
+			// Если лексема операция
+			if (token.type == TypeToken::OPERATION)
+			{
+				// Если операция унарная
+				if (token.arity == Arity::UNARY)
+				{
+					right = stVariable.top();
+					stVariable.pop();
+
+					if (token.name == "+")
+						stVariable.push(right);
+					if (token.name == "-")
+						stVariable.push(-right);
+
+					right = 0;
+				}
+				// Иначе операция бинарная
+				else
+				{
+					right = stVariable.top();
+					stVariable.pop();
+
+					left = stVariable.top();
+					stVariable.pop();
+
+					if (token.name == "+")
+						stVariable.push(left + right);
+					if (token.name == "-")
+						stVariable.push(left - right);
+					if (token.name == "*")
+						stVariable.push(left * right);
+					if (token.name == "/")
+						stVariable.push(left / right);
+					if (token.name == "^")
+						stVariable.push(pow(left, right));
+
+					left = 0;
+					right = 0;
+				}
+			}
+		}
+
+		result = stVariable.top();
+	}
+	void showTableVar() const noexcept
+	{
+		std::cout << "size tableVariable = " << tableVariable.size() << '\n';
+		for (const auto& elem : tableVariable)
+		{
+			std::cout << elem.first << ' ' << elem.second << '\n';
+		}
+	}
+
+
+	Calculator& operator = (const Calculator& other)
+	{
+		if (this == &other) return *this;
+
+		CopyOther(other);
+
+		return *this;
+	}
+	Calculator& operator = (const std::string& str)
+	{
+		if (tokens.GetSrcString() == str) return *this;
+
+		Calculator tmp(str);
+		CopyOther(tmp);
+
+		return *this;
+	}
 };
 
 
@@ -241,29 +422,39 @@ public:
 
 int main()
 {
-	std::vector<std::string> vec = Separation("1 +5 *(6*    g56)-      3-uUuj+l");
+	Calculator test("-1 * (-1) + 2 ^ (9) / 3");
 
-	std::cout << isConst("05445") << '\n';
-	std::cout << isVariable("gvf_123") << '\n';
-	std::cout << isOperation("+") << '\n';
-	std::cout << isOpenBracket(")") << '\n';
-	std::cout << isCloseBracket("5") << '\n';
+	std::cout << test.GetPolStr() << '\n';
+	test.showTableVar();
+	std::cout << test.GetResult() << '\n';
 
+	test = "5 + a + 5 -3*(-11) + aaa_1";
 
-	Token a;
-
-	Token b;
-
-	b.name = "123";
-
-	a = b;
-
-	std::cout << a.name << '\n';
-
-
-	for (const auto& elem : vec)
-		std::cout << elem << ' ';
 	std::cout << '\n';
+
+	std::cout << test.GetPolStr() << '\n';
+	test.showTableVar();
+	std::cout << test.GetResult() << '\n';
+
+	
+	test.SetValVar("a", -20);
+	test.Calculation();
+
+	std::cout << test.GetPolStr() << '\n';
+	test.showTableVar();
+	std::cout << test.GetResult() << '\n';
+
+
+
+
+	for (const auto& elem : test.GetTableVar())
+	{
+		std::cout << elem.first << ' ' << elem.second << '\n';
+	}
+
+
+
+
 
 
 
