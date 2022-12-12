@@ -133,6 +133,8 @@ bool isCloseBracket(std::string token)
 
 
 
+
+
 class Record
 {
 private:
@@ -249,6 +251,7 @@ private:
 			// Если лексема операция
 			else if (tokens[i].type == TypeToken::OPERATION)
 			{
+				// Проверка на унарность
 				if (tokens[i].name == "+" || tokens[i].name == "-")
 				{
 					if (i == 0 || tokens[i - 1].type == TypeToken::OPEN_BRACKET)
@@ -379,7 +382,7 @@ public:
 
 		result = stVariable.top();
 	}
-	void showTableVar() const noexcept
+	void ShowTableVar() const noexcept
 	{
 		std::cout << "size tableVariable = " << tableVariable.size() << '\n';
 		for (const auto& elem : tableVariable)
@@ -425,7 +428,7 @@ int main()
 	Calculator test("-1 * (-1) + 2 ^ (9) / 3");
 
 	std::cout << test.GetPolStr() << '\n';
-	test.showTableVar();
+	test.ShowTableVar();
 	std::cout << test.GetResult() << '\n';
 
 	test = "5 + a + 5 -3*(-11) + aaa_1";
@@ -433,16 +436,29 @@ int main()
 	std::cout << '\n';
 
 	std::cout << test.GetPolStr() << '\n';
-	test.showTableVar();
+	test.ShowTableVar();
 	std::cout << test.GetResult() << '\n';
 
 	
-	test.SetValVar("a", -20);
+	test.SetValVar("a", -23);
 	test.Calculation();
 
 	std::cout << test.GetPolStr() << '\n';
-	test.showTableVar();
+	test.ShowTableVar();
 	std::cout << test.GetResult() << '\n';
+
+	std::cout << '\n';
+
+	test = "2+(-3) + abc ^ a";
+	std::cout << test.GetResult() << "\n\n";
+	test.SetValVar("abc", -5);
+	test.SetValVar("a", 2);
+	test.Calculation();
+	std::cout << test.GetPolStr() << '\n';
+	test.ShowTableVar();
+	std::cout << test.GetResult() << '\n';
+
+
 
 
 
