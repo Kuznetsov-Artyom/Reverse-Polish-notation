@@ -33,13 +33,13 @@ struct Token
 {
 	TypeToken type = TypeToken::DEFAULT;
 	std::string name{};
-	int value{};
+	double value{};
 
 	// Поле для лексемы типа OPERATION
 	Arity arity = Arity::DEFAULT;
 
 	Token() {}
-	Token(TypeToken t, std::string n, int v = 0, Arity a = Arity::DEFAULT) : type{ t }, name{ n }, value{ v }, arity{ a } {}
+	Token(TypeToken t, std::string n, double v = 0.0, Arity a = Arity::DEFAULT) : type{ t }, name{ n }, value{ v }, arity{ a } {}
 };
 
 
@@ -65,7 +65,7 @@ std::vector<std::string> Separation(std::string str)
 			continue;
 		}
 
-		if (isdigit(sym) || isalpha(sym) || sym == '_')
+		if (isdigit(sym) || isalpha(sym) || sym == '_' || sym == '.')
 		{
 			current += sym;
 			flagVar = true;
@@ -91,20 +91,31 @@ std::vector<std::string> Separation(std::string str)
 }
 bool isConst(std::string token)
 {
-	if (token.size() == 1 && token[0] == '0') return true;
-	if (token.size() > 1 && token[0] == '0') return false;
+	if (token.front() == '.' || token.back() == '.') return false;
+	if (token.size() > 1 && token[0] == '0' && token[1] != '.') return false;
+
+	bool flagPoint = false;
 
 	for (const auto& sym : token)
-		if (!isdigit(sym)) return false;
+	{
+		if (sym == '.')
+		{
+			if (!flagPoint) flagPoint = true;
+			else return false;
+		}
+		if (!(isdigit(sym) || sym == '.')) return false;
+	}
 
 	return true;
+
+
 }
 bool isVariable(std::string token)
 {
 	if (isdigit(token[0])) return false;
 
 	for (const auto& sym : token)
-		if (!isalpha(sym) && !isdigit(sym) && sym != '_') return false;
+		if (!(isalpha(sym) || isdigit(sym) || sym == '_')) return false;
 
 	return true;
 }
@@ -152,7 +163,7 @@ public:
 			// Проверка на тип CONST
 			if (isConst(token))
 			{
-				tokens.emplace_back(Token(TypeToken::CONST, token, std::atoi(token.c_str())));
+				tokens.emplace_back(Token(TypeToken::CONST, token, std::atof(token.c_str())));
 			}
 			// Проверка на тип VARIABLE
 			else if (isVariable(token))
@@ -163,7 +174,7 @@ public:
 			else if (isOperation(token))
 			{
 				int priority = (token == "+" || token == "-") ? 1 : ((token == "^") ? 3 : 2);
-				tokens.emplace_back(Token(TypeToken::OPERATION, token, priority));
+				tokens.emplace_back(Token(TypeToken::OPERATION, token, static_cast<double>(priority)));
 			}
 			// Проверка на тип OPEN_BRACKET
 			else if (isOpenBracket(token))
@@ -183,7 +194,7 @@ public:
 
 
 	size_t GetCount() const noexcept { return tokens.size(); }
-	std::string  GetSrcString() const noexcept { return srcStr; }
+	std::string  GetSrcStr() const noexcept { return srcStr; }
 
 	Record& operator = (const Record& other)
 	{
@@ -214,10 +225,10 @@ class Calculator
 {
 private:
 	Record tokens;
-	std::map<std::string, int> tableVariable;
+	std::map<std::string, double> tableVariable;
 	std::vector<Token> postForm;
 	std::string polStr;
-	int result;
+	double result;
 
 private:
 	void GenerationPostForm()
@@ -302,21 +313,22 @@ public:
 
 
 	std::string GetPolStr() const noexcept { return polStr; }
-	int GetResult() const noexcept { return result; }
-	int GetValVar(const std::string& name)
+	std::string GetSrcStr() const noexcept { return tokens.GetSrcStr(); }
+	double GetResult() const noexcept { return result; }
+	double GetValVar(const std::string& name)
 	{
 		if (tableVariable.find(name) == tableVariable.end())
 			throw - 2;
 
 		return tableVariable[name];
 	}
-	const std::map<std::string, int>& GetTableVar() const noexcept
+	const std::map<std::string, double>& GetTableVar() const noexcept
 	{
 		return tableVariable;
 	}
 
 
-	void SetValVar(std::string name, int value)
+	void SetValVar(std::string name, double value)
 	{
 		if (tableVariable.find(name) == tableVariable.end())
 			throw - 2;
@@ -327,9 +339,9 @@ public:
 
 	void Calculation()
 	{
-		std::stack<int> stVariable;
-		int left{};
-		int right{};
+		std::stack<double> stVariable;
+		double left{};
+		double right{};
 
 		for (const auto& token : postForm)
 		{
@@ -402,7 +414,7 @@ public:
 	}
 	Calculator& operator = (const std::string& str)
 	{
-		if (tokens.GetSrcString() == str) return *this;
+		if (tokens.GetSrcStr() == str) return *this;
 
 		Calculator tmp(str);
 		CopyOther(tmp);
@@ -425,6 +437,7 @@ public:
 
 int main()
 {
+
 	Calculator test("-1 * (-1) + 2 ^ (9) / 3");
 
 	std::cout << test.GetPolStr() << '\n';
@@ -458,19 +471,46 @@ int main()
 	test.ShowTableVar();
 	std::cout << test.GetResult() << '\n';
 
+	std::cout << '\n';
+
+	test = "0.5 ^ (0.25 + 0.932 ^ 2.0) / (0.3 + 20) ^ xD";
+	test.SetValVar("xD", 3);
+	test.Calculation();
+	std::cout << test.GetSrcStr() << '\n';
+	std::cout << test.GetPolStr() << '\n';
+	test.ShowTableVar();
+	std::cout << "Result = " << test.GetResult() << '\n';
+
+	std::cout << '\n';
+
+	test = "(4 + 59.6)^(1 / 3) * 0.005 + 3.14^opa";
+	test.SetValVar("opa", 3);
+	test.Calculation();
+	std::cout << test.GetSrcStr() << '\n';
+	std::cout << test.GetPolStr() << '\n';
+	test.ShowTableVar();
+	std::cout << "Result = " << test.GetResult() << '\n';
+
+	std::cout << '\n';
+	test = "25^0.5 + (27^(1/3))^2.6";
+	std::cout << test.GetSrcStr() << '\n';
+	std::cout << test.GetPolStr() << '\n';
+	test.ShowTableVar();
+	std::cout << "Result = " << test.GetResult() << '\n';
+
+	
 
 
-
-
-
-	for (const auto& elem : test.GetTableVar())
-	{
-		std::cout << elem.first << ' ' << elem.second << '\n';
-	}
-
-
-
-
+	/*std::cout << isConst("05") << '\n';
+	std::cout << isConst("321") << '\n';
+	std::cout << isConst("0321") << '\n';
+	std::cout << isConst(".321") << '\n';
+	std::cout << isConst("0.321") << '\n';
+	std::cout << isConst("5.074") << '\n';
+	std::cout << isConst("0.3232.3") << '\n';
+	std::cout << isConst("0.3233304_.") << '\n';
+	std::cout << isConst("0.") << '\n';
+	std::cout << isConst("5.40");*/
 
 
 
