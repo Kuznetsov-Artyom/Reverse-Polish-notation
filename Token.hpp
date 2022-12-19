@@ -50,24 +50,20 @@ struct Token
 
 
 
-
-// Разделяет исходную строку на лексемы
-std::vector<std::string> Separation(std::string str);
-
 // Проверяет лексему на тип CONST
-bool isConst(std::string token);
+bool IsConst(std::string token);
 
 // Проверяет лексему на тип VARIABLE
-bool isVariable(std::string token);
+bool IsVariable(std::string token);
 
 // Проверяет лексему на тип OPERATION
-bool isOperation(std::string token);
+bool IsOperation(std::string token);
 
 // Проверяет лексему на тип OPEN_BRACKET
-bool isOpenBracket(std::string token);
+bool IsOpenBracket(std::string token);
 
 // Проверяет лексему на тип CLOSE_BRACKET
-bool isCloseBracket(std::string token);
+bool IsCloseBracket(std::string token);
 
 
 

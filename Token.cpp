@@ -2,56 +2,8 @@
 
 
 
-// Разделяет исходную строку на лексемы
-std::vector<std::string> Separation(std::string str)
-{
-	std::vector<std::string> tokens;
-	std::string current;
-
-	bool flagVar = false;
-
-	for (size_t i = 0; i < str.size(); ++i)
-	{
-		char sym = str[i];
-
-		if (sym == ' ')
-		{
-			if (flagVar)
-			{
-				tokens.emplace_back(current);
-				flagVar = false;
-				current.clear();
-			}
-			continue;
-		}
-
-		if (isdigit(sym) || isalpha(sym) || sym == '_' || sym == '.')
-		{
-			current += sym;
-			flagVar = true;
-		}
-		else
-		{
-			if (flagVar)
-			{
-				tokens.emplace_back(current);
-				flagVar = false;
-				current.clear();
-			}
-
-			current += sym;
-			tokens.emplace_back(current);
-			current.clear();
-		}
-	}
-
-	if (current.size()) tokens.emplace_back(current);
-
-	return tokens;
-}
-
 // Проверяет лексему на тип CONST
-bool isConst(std::string token)
+bool IsConst(std::string token)
 {
 	if (token.front() == '.' || token.back() == '.') return false;
 	if (token.size() > 1 && token[0] == '0' && token[1] != '.') return false;
@@ -74,7 +26,7 @@ bool isConst(std::string token)
 }
 
 // Проверяет лексему на тип VARIABLE
-bool isVariable(std::string token)
+bool IsVariable(std::string token)
 {
 	if (isdigit(token[0])) return false;
 
@@ -85,7 +37,7 @@ bool isVariable(std::string token)
 }
 
 // Проверяет лексему на тип OPERATION
-bool isOperation(std::string token)
+bool IsOperation(std::string token)
 {
 	if (token.size() > 1) return false;
 
@@ -97,7 +49,7 @@ bool isOperation(std::string token)
 }
 
 // Проверяет лексему на тип OPEN_BRACKET
-bool isOpenBracket(std::string token)
+bool IsOpenBracket(std::string token)
 {
 	if (token.size() > 1) return false;
 
@@ -105,7 +57,7 @@ bool isOpenBracket(std::string token)
 }
 
 // Проверяет лексему на тип CLOSE_BRACKET
-bool isCloseBracket(std::string token)
+bool IsCloseBracket(std::string token)
 {
 	if (token.size() > 1) return false;
 

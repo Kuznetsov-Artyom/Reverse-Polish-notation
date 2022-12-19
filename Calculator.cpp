@@ -1,5 +1,6 @@
 #include "Calculator.hpp"
 
+
 // +-+-+-+-+-+-+-+-+ Приватные методы +-+-+-+-+-+-+-+-+
 
 // Генерирует поствиксную запись лексем
@@ -152,7 +153,7 @@ void Calculator::Calculation()
 			stVariable.push(tableVariable[token.name]);
 		}
 		// Если лексема операция
-		if (token.type == TypeToken::OPERATION)
+		else if (token.type == TypeToken::OPERATION)
 		{
 			// Если операция унарная
 			if (token.arity == Arity::UNARY)
@@ -176,16 +177,11 @@ void Calculator::Calculation()
 				left = stVariable.top();
 				stVariable.pop();
 
-				if (token.name == "+")
-					stVariable.push(left + right);
-				if (token.name == "-")
-					stVariable.push(left - right);
-				if (token.name == "*")
-					stVariable.push(left * right);
-				if (token.name == "/")
-					stVariable.push(left / right);
-				if (token.name == "^")
-					stVariable.push(pow(left, right));
+				if (token.name == "+") stVariable.push(left + right);
+				else if (token.name == "-") stVariable.push(left - right);
+				else if (token.name == "*") stVariable.push(left * right);
+				else if (token.name == "/") stVariable.push(left / right);
+				else stVariable.push(pow(left, right));
 
 				left = 0;
 				right = 0;

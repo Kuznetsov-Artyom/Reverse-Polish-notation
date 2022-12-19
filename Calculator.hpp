@@ -34,6 +34,7 @@ public:
 	Calculator(const std::string& str);
 	Calculator(const Calculator& other);
 
+	~Calculator() {}
 
 
 

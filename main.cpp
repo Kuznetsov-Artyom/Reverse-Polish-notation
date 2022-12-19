@@ -1,5 +1,9 @@
 #include <iostream>
 #include "Calculator.hpp"
+#include <limits>
+
+
+
 
 
 
@@ -8,41 +12,42 @@
 
 int main()
 {
+	system("chcp 1251 > nul");
 
-	Calculator test("-1 * (-1) + 2 ^ (9) / 3");
+	while (true)
+	{
+		std::string str;
 
+		std::cout << "input = ";
+		std::getline(std::cin, str);
+
+		try
+		{
+			Calculator testing(str);
+			std::cout << testing.GetPolStr() << '\n';
+			std::cout << testing.GetResult() << '\n';
+		}
+		catch (const ExceptionRecord& ex)
+		{
+			std::cout << "Code error: " << ex.GetCodeError() << '\n';
+			std::cout << ex.what() << '\n';
+			continue;
+		}
+	}
+
+	/*Calculator test2("13.3 - 0.3");
+	std::cout << test2.GetSrcStr() << '\n';
+	std::cout << test2.GetPolStr() << '\n';
+	test2.ShowTableVar();
+	std::cout << "Result = " << test2.GetResult() << '\n';*/
+
+
+	/*Calculator test("5 + (5) -7+abc/3.0");
+	std::cout << test.GetSrcStr() << '\n';
 	std::cout << test.GetPolStr() << '\n';
 	test.ShowTableVar();
-	std::cout << test.GetResult() << '\n';
+	std::cout << "Result = " << test.GetResult() << '\n';
 
-	test = "5 + a + 5 -3*(-11) + aaa_1";
-
-	std::cout << '\n';
-
-	std::cout << test.GetPolStr() << '\n';
-	test.ShowTableVar();
-	std::cout << test.GetResult() << '\n';
-
-	
-	test.SetValVar("a", -23);
-	test.Calculation();
-
-	std::cout << test.GetPolStr() << '\n';
-	test.ShowTableVar();
-	std::cout << test.GetResult() << '\n';
-
-	std::cout << '\n';
-
-	test = "2+(-3) + abc ^ a";
-	std::cout << test.GetResult() << "\n\n";
-	test.SetValVar("abc", -5);
-	test.SetValVar("a", 2);
-	test.Calculation();
-	std::cout << test.GetPolStr() << '\n';
-	test.ShowTableVar();
-	std::cout << test.GetResult() << '\n';
-
-	std::cout << '\n';
 
 	test = "0.5 ^ (0.25 + 0.932 ^ 2.0) / (0.3 + 20) ^ xD";
 	test.SetValVar("xD", 3);
@@ -68,7 +73,7 @@ int main()
 	std::cout << test.GetSrcStr() << '\n';
 	std::cout << test.GetPolStr() << '\n';
 	test.ShowTableVar();
-	std::cout << "Result = " << test.GetResult() << '\n';
+	std::cout << "Result = " << test.GetResult() << '\n';*/
 
 	
 
