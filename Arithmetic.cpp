@@ -1,10 +1,10 @@
-#include "Calculator.hpp"
+#include "Arithmetic.hpp"
 
 
 // +-+-+-+-+-+-+-+-+ Приватные методы +-+-+-+-+-+-+-+-+
 
 // Генерирует поствиксную запись лексем
-void Calculator::GenerationPostForm()
+void Arithmetic::GenerationPostForm()
 {
 	std::stack<Token> stOperation;
 
@@ -68,8 +68,8 @@ void Calculator::GenerationPostForm()
 	polStr = polStr.substr(0, polStr.size() - 1);
 }
 
-// Копирует другой объект типа Calculator
-void Calculator::CopyOther(const Calculator& other)
+// Копирует другой объект типа Arithmetic
+void Arithmetic::CopyOther(const Arithmetic& other)
 {
 	tokens = other.tokens;
 	tableVariable = other.tableVariable;
@@ -83,12 +83,12 @@ void Calculator::CopyOther(const Calculator& other)
 
 // +-+-+-+-+-+-+-+-+ Конструкторы +-+-+-+-+-+-+-+-+
 
-Calculator::Calculator(const std::string& str) : tokens{ str }
+Arithmetic::Arithmetic(const std::string& str) : tokens{ str }
 {
 	GenerationPostForm();
 	Calculation();
 }
-Calculator::Calculator(const Calculator& other) { CopyOther(other); }
+Arithmetic::Arithmetic(const Arithmetic& other) { CopyOther(other); }
 
 
 
@@ -96,25 +96,25 @@ Calculator::Calculator(const Calculator& other) { CopyOther(other); }
 // +-+-+-+-+-+-+-+-+ Методы (геттеры) +-+-+-+-+-+-+-+-+
 
 // Возвращает "обратную польскую запись"
-std::string Calculator::GetPolStr() const noexcept { return polStr; }
+std::string Arithmetic::GetPolStr() const noexcept { return polStr; }
 
 // Возвращает исходную переданную строку
-std::string Calculator::GetSrcStr() const noexcept { return tokens.GetSrcStr(); }
+std::string Arithmetic::GetSrcStr() const noexcept { return tokens.GetSrcStr(); }
 
 // Возвращает результат вычисления
-double Calculator::GetResult() const noexcept { return result; }
+double Arithmetic::GetResult() const noexcept { return result; }
 
 // Возвращает значение определенной переменной
-double Calculator::GetValVar(const std::string& name)
+double Arithmetic::GetValVar(const std::string& name)
 {
 	if (tableVariable.find(name) == tableVariable.end())
-		throw - 2;
+		throw std::logic_error{ "Данный элемент отсутсвует" };
 
 	return tableVariable[name];
 }
 
 // Возвращает константкую ссылку на таблицу с переменными и их значениями
-const std::map<std::string, double>& Calculator::GetTableVar() const noexcept
+const std::map<std::string, double>& Arithmetic::GetTableVar() const noexcept
 {
 	return tableVariable;
 }
@@ -123,12 +123,12 @@ const std::map<std::string, double>& Calculator::GetTableVar() const noexcept
 
 
 // +-+-+-+-+-+-+-+-+ Сеттер +-+-+-+-+-+-+-+-+
- 
+
 // Изменяет значение переменной из таблицы
-void Calculator::SetValVar(std::string name, double value)
+void Arithmetic::SetValVar(std::string name, double value)
 {
 	if (tableVariable.find(name) == tableVariable.end())
-		throw - 2;
+		throw std::logic_error{ "Данный элемент отсутсвует" };
 
 	tableVariable[name] = value;
 }
@@ -139,7 +139,7 @@ void Calculator::SetValVar(std::string name, double value)
 // +-+-+-+-+-+-+-+-+ Прочие методы +-+-+-+-+-+-+-+-+
 
 // Вычисляет результат выражения
-void Calculator::Calculation()
+void Arithmetic::Calculation()
 {
 	std::stack<double> stVariable;
 	double left{};
@@ -180,7 +180,14 @@ void Calculator::Calculation()
 				if (token.name == "+") stVariable.push(left + right);
 				else if (token.name == "-") stVariable.push(left - right);
 				else if (token.name == "*") stVariable.push(left * right);
-				else if (token.name == "/") stVariable.push(left / right);
+				else if (token.name == "/")
+				{
+					// Выбрасываем исключение, если происходит деление на ноль
+					if (right == 0)
+						throw ExceptionRecord{ CodeError::ZERO_DIVISION, "Деление на ноль" };
+
+					stVariable.push(left / right);
+				}
 				else stVariable.push(pow(left, right));
 
 				left = 0;
@@ -193,7 +200,7 @@ void Calculator::Calculation()
 }
 
 // Выводит переменные и их значения в консоль (логи)
-void Calculator::ShowTableVar() const noexcept
+void Arithmetic::ShowTableVar() const noexcept
 {
 	std::cout << "size tableVariable = " << tableVariable.size() << '\n';
 	for (const auto& elem : tableVariable)
@@ -207,7 +214,7 @@ void Calculator::ShowTableVar() const noexcept
 
 // +-+-+-+-+-+-+-+-+ Операторы +-+-+-+-+-+-+-+-+
 
-Calculator& Calculator::operator = (const Calculator& other)
+Arithmetic& Arithmetic::operator = (const Arithmetic& other)
 {
 	if (this == &other) return *this;
 
@@ -215,11 +222,11 @@ Calculator& Calculator::operator = (const Calculator& other)
 
 	return *this;
 }
-Calculator& Calculator::operator = (const std::string& str)
+Arithmetic& Arithmetic::operator = (const std::string& str)
 {
 	if (tokens.GetSrcStr() == str) return *this;
 
-	Calculator tmp(str);
+	Arithmetic tmp(str);
 	CopyOther(tmp);
 
 	return *this;

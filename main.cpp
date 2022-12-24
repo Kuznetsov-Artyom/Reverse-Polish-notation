@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Calculator.hpp"
+#include "Arithmetic.hpp"
 #include <limits>
 
 
@@ -14,7 +14,7 @@ int main()
 {
 	system("chcp 1251 > nul");
 
-	while (true)
+	/*while (true)
 	{
 		std::string str;
 
@@ -23,7 +23,7 @@ int main()
 
 		try
 		{
-			Calculator testing(str);
+			Arithmetic testing(str);
 			std::cout << testing.GetPolStr() << '\n';
 			std::cout << testing.GetResult() << '\n';
 		}
@@ -33,16 +33,16 @@ int main()
 			std::cout << ex.what() << '\n';
 			continue;
 		}
-	}
+	}*/
 
-	/*Calculator test2("13.3 - 0.3");
+	/*Arithmetic test2("13.3 - 0.3");
 	std::cout << test2.GetSrcStr() << '\n';
 	std::cout << test2.GetPolStr() << '\n';
 	test2.ShowTableVar();
 	std::cout << "Result = " << test2.GetResult() << '\n';*/
 
 
-	/*Calculator test("5 + (5) -7+abc/3.0");
+	Arithmetic test("5 + (5) -7+abc/3.0");
 	std::cout << test.GetSrcStr() << '\n';
 	std::cout << test.GetPolStr() << '\n';
 	test.ShowTableVar();
@@ -73,7 +73,7 @@ int main()
 	std::cout << test.GetSrcStr() << '\n';
 	std::cout << test.GetPolStr() << '\n';
 	test.ShowTableVar();
-	std::cout << "Result = " << test.GetResult() << '\n';*/
+	std::cout << "Result = " << test.GetResult() << '\n';
 
 	
 

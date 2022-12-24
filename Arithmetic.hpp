@@ -1,5 +1,5 @@
-#ifndef CALCULATOR_HPP
-#define CALCULATOR_HPP
+#ifndef ARITHMETIC_HPP
+#define ARITHMETIC_HPP
 
 
 #include <iostream>
@@ -10,36 +10,37 @@
 
 
 
-class Calculator
+class Arithmetic
 {
 private:
 	Record tokens;
 	std::map<std::string, double> tableVariable;
 	std::vector<Token> postForm;
-	std::string polStr;
-	double result;
+	std::string polStr{};
+	double result{};
 
 private:
 	// +-+-+-+-+-+-+-+-+ Приватные методы +-+-+-+-+-+-+-+-+
-	 
+
 	// Генерирует поствиксную запись лексем
 	void GenerationPostForm();
 
-	// Копирует другой объект типа Calculator
-	void CopyOther(const Calculator& other);
+	// Копирует другой объект типа Arithmetic
+	void CopyOther(const Arithmetic& other);
 
 public:
 	// +-+-+-+-+-+-+-+-+ Конструкторы +-+-+-+-+-+-+-+-+
 
-	Calculator(const std::string& str);
-	Calculator(const Calculator& other);
+	Arithmetic() {}
+	Arithmetic(const std::string& str);
+	Arithmetic(const Arithmetic& other);
 
-	~Calculator() {}
+	~Arithmetic() {}
 
 
 
 	// +-+-+-+-+-+-+-+-+ Методы (геттеры) +-+-+-+-+-+-+-+-+
-	
+
 	// Возвращает "обратную польскую запись"
 	std::string GetPolStr() const noexcept;
 
@@ -59,7 +60,7 @@ public:
 
 
 	// +-+-+-+-+-+-+-+-+ Сеттер +-+-+-+-+-+-+-+-+
-	
+
 	// Изменяет значение переменной из таблицы
 	void SetValVar(std::string name, double value);
 
@@ -73,16 +74,15 @@ public:
 
 	// Выводит переменные и их значения в консоль (логи)
 	void ShowTableVar() const noexcept;
-	
+
 
 
 
 	// +-+-+-+-+-+-+-+-+ Операторы +-+-+-+-+-+-+-+-+
 
-	Calculator& operator = (const Calculator& other);
-	Calculator& operator = (const std::string& str);
+	Arithmetic& operator = (const Arithmetic& other);
+	Arithmetic& operator = (const std::string& str);
 };
-
 
 
 #endif // !CALCULATOR_HPP

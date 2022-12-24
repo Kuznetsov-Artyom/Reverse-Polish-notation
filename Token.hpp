@@ -67,4 +67,4 @@ bool IsCloseBracket(std::string token);
 
 
 
-#endif // !TOKEN_HPP
+#endif // TOKEN_HPP
