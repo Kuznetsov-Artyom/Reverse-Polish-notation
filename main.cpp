@@ -14,7 +14,7 @@ int main()
 {
 	system("chcp 1251 > nul");
 
-	/*while (true)
+	while (true)
 	{
 		std::string str;
 
@@ -24,8 +24,10 @@ int main()
 		try
 		{
 			Arithmetic testing(str);
+			std::cout << testing.GetSrcStr() << '\n';
 			std::cout << testing.GetPolStr() << '\n';
-			std::cout << testing.GetResult() << '\n';
+			testing.ShowTableVar();
+			std::cout << "Result = " << testing.GetResult() << '\n';
 		}
 		catch (const ExceptionRecord& ex)
 		{
@@ -33,7 +35,7 @@ int main()
 			std::cout << ex.what() << '\n';
 			continue;
 		}
-	}*/
+	}
 
 	/*Arithmetic test2("13.3 - 0.3");
 	std::cout << test2.GetSrcStr() << '\n';
