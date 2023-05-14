@@ -59,10 +59,10 @@ bool IsVariable(std::string token);
 // Checks the token for the OPERATION type
 bool IsOperation(std::string token);
 
-// Проверяет лексему на тип OPEN_BRACKET
+// Checks the token for the OPEN_BRACKET type
 bool IsOpenBracket(std::string token);
 
-// Проверяет лексему на тип CLOSE_BRACKET
+// Checks the token for the CLOSE_BRACKET type
 bool IsCloseBracket(std::string token);
 
 
