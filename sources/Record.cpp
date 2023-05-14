@@ -97,7 +97,7 @@ void Record::DefiningTypes()
 			tokens.emplace_back(Token(TypeToken::CLOSE_BRACKET, token));
 		}
 		// If the type is not defined (invalid value)
-		else throw ExceptionRecord{ CodeError::TYPE_UNDEFINED, "Введена недопустимая лексема" };
+		else throw ExceptionRecord{ CodeError::TYPE_UNDEFINED, "Invalid token entered" };
 	}
 }
 
@@ -106,7 +106,7 @@ void Record::CheckingCorrect()
 {
 	// Checking for the correctness of parentheses
 	if (!CheckingParentheses(GetSrcStr()))
-		throw ExceptionRecord{ CodeError::INVALID_PARENTHESES, "Круглые скобки введены некорректно" };
+		throw ExceptionRecord{ CodeError::INVALID_PARENTHESES, "Parentheses are entered incorrectly" };
 
 	bool flagVarConst = false;
 	bool flagOperation = false;
@@ -117,7 +117,7 @@ void Record::CheckingCorrect()
 		{
 			// We throw an exception if there are 2 operands in a row
 			if (flagVarConst)
-				throw ExceptionRecord{ CodeError::NO_OPERATOR, "Отсутствует оператор" };
+				throw ExceptionRecord{ CodeError::NO_OPERATOR, "Absent operator" };
 
 			flagVarConst = true;
 			flagOperation = false;
@@ -127,12 +127,12 @@ void Record::CheckingCorrect()
 		{
 			// We throw an exception if the last token is an operation
 			if (flagOperation || i == tokens.size() - 1)
-				throw ExceptionRecord{ CodeError::NO_OPERAND, "Отсутствует операнд" };
+				throw ExceptionRecord{ CodeError::NO_OPERAND, "Absent operand" };
 
 			// We throw an exception if there is no operand in the beginning. expressions or after the opening parenthesis 
 			if (tokens[i].name == "*" || tokens[i].name == "/" || tokens[i].name == "^")
 				if (i == 0 || tokens[i - 1].type == TypeToken::OPEN_BRACKET)
-					throw ExceptionRecord{ CodeError::NO_OPERAND, "Отсутствует операнд" };
+					throw ExceptionRecord{ CodeError::NO_OPERAND, "Absent operand" };
 
 			flagOperation = true;
 			flagVarConst = false;
@@ -142,17 +142,17 @@ void Record::CheckingCorrect()
 		{
 			// We throw an exception if there is no operator between the operands and the opening parenthesis
 			if (tokens[i].type == TypeToken::OPEN_BRACKET && flagVarConst)
-				throw ExceptionRecord{ CodeError::NO_OPERATOR, "Отсутствует оператор" };
+				throw ExceptionRecord{ CodeError::NO_OPERATOR, "Absent operator" };
 
 			if (tokens[i].type == TypeToken::CLOSE_BRACKET)
 			{
 				// We throw an exception if empty parentheses were entered
 				if (tokens[i - 1].type == TypeToken::OPEN_BRACKET)
-					throw ExceptionRecord{ CodeError::EMPTY_PARENTHESES, "Введены пустые круглые скобки" };
+					throw ExceptionRecord{ CodeError::EMPTY_PARENTHESES, "Empty parentheses are introduced" };
 
 				// We throw an exception if there is no operand before the closing parenthesis
 				else if (flagOperation)
-					throw ExceptionRecord{ CodeError::NO_OPERAND, "Отсутствует операнд" };
+					throw ExceptionRecord{ CodeError::NO_OPERAND, "Absent operand" };
 			}
 
 			flagVarConst = false;
@@ -170,7 +170,7 @@ Record::Record(const std::string& str) : srcStr{ str }
 {
 	// Throwing an exception if the expression was not entered
 	if (srcStr.size() == 0)
-		throw ExceptionRecord{ CodeError::EMPTY_EXPRESSION, "Выражение отсутсвует" };
+		throw ExceptionRecord{ CodeError::EMPTY_EXPRESSION, "Expression is missing" };
 
 	SplitOnTokens(str);
 	DefiningTypes();

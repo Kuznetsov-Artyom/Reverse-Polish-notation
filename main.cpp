@@ -33,6 +33,8 @@ int main()
 			std::cout << ex.what() << '\n';
 			continue;
 		}
+
+		std::cout << '\n';
 	}
 
 	return 0;

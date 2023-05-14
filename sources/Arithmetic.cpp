@@ -106,7 +106,7 @@ double Arithmetic::GetResult() const noexcept { return result; }
 double Arithmetic::GetValVar(const std::string& name)
 {
 	if (tableVariable.find(name) == tableVariable.end())
-		throw std::logic_error{ "Данный элемент отсутсвует" };
+		throw std::logic_error{ "This element is missing" };
 
 	return tableVariable[name];
 }
@@ -126,7 +126,7 @@ const std::map<std::string, double>& Arithmetic::GetTableVar() const noexcept
 void Arithmetic::SetValVar(std::string name, double value)
 {
 	if (tableVariable.find(name) == tableVariable.end())
-		throw std::logic_error{ "Данный элемент отсутсвует" };
+		throw std::logic_error{ "This element is missing" };
 
 	tableVariable[name] = value;
 }
@@ -182,7 +182,7 @@ void Arithmetic::Calculation()
 				{
 					// We throw an exception if division by zero occurs
 					if (right == 0)
-						throw ExceptionRecord{ CodeError::ZERO_DIVISION, "Деление на ноль" };
+						throw ExceptionRecord{ CodeError::ZERO_DIVISION, "Division by zero" };
 
 					stVariable.push(left / right);
 				}
