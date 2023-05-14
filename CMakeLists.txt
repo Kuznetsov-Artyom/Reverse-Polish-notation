@@ -1,6 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.25.0)
 
-project(reverse_polish_entry)
+project(reverse_polish_notation)
 
 include_directories(./sources)
 include_directories(./headers)
@@ -19,5 +19,5 @@ set(HDR
 
 add_library(main_lib ${SRC} ${HDR})
 
-add_executable(reverse_polish_entry main.cpp)
-target_link_libraries(reverse_polish_entry main_lib)
+add_executable(reverse_polish_notation main.cpp)
+target_link_libraries(reverse_polish_notation main_lib)
