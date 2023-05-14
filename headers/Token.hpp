@@ -9,7 +9,7 @@
 
 
 
-// Возможные варианты лексем
+// Possible variants of tokens
 enum class TypeToken
 {
 	DEFAULT = 0,
@@ -23,7 +23,7 @@ enum class TypeToken
 
 
 
-// Арность оператора
+// Operator arity
 enum class Arity
 {
 	DEFAULT = 0,
@@ -34,14 +34,14 @@ enum class Arity
 
 
 
-// Структура описывающая лексему
+// The structure describing the token
 struct Token
 {
 	TypeToken type = TypeToken::DEFAULT;
 	std::string name{};
 	double value{};
 
-	// Поле для лексемы типа OPERATION
+	// Field for the OPERATION type token
 	Arity arity = Arity::DEFAULT;
 
 	Token() {}
@@ -50,13 +50,13 @@ struct Token
 
 
 
-// Проверяет лексему на тип CONST
+// Checks the token for the CONST type
 bool IsConst(std::string token);
 
-// Проверяет лексему на тип VARIABLE
+// Checks the token for the VARIABLE type
 bool IsVariable(std::string token);
 
-// Проверяет лексему на тип OPERATION
+// Checks the token for the OPERATION type
 bool IsOperation(std::string token);
 
 // Проверяет лексему на тип OPEN_BRACKET

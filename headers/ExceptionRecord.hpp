@@ -5,7 +5,7 @@
 #include <stdexcept>
 
 
-// Перечисление с кодами возможных ошибок
+// Enumeration with possible error codes
 enum class CodeError
 {
 	DEFAULT = 0,
@@ -18,10 +18,9 @@ enum class CodeError
 	ZERO_DIVISION = -7,
 };
 
-// Класс исключений для класса Record
+// Exception class for the Record class
 class ExceptionRecord : public std::exception
 {
-
 private:
 	CodeError code = CodeError::DEFAULT;
 
@@ -33,8 +32,6 @@ public:
 
 	int GetCodeError() const noexcept { return static_cast<int>(code); };
 };
-
-
 
 
 #endif // EXCEPTION_RECORD_HPP

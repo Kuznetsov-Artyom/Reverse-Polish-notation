@@ -20,16 +20,15 @@ private:
 	double result{};
 
 private:
-	// +-+-+-+-+-+-+-+-+ Приватные методы +-+-+-+-+-+-+-+-+
 
-	// Генерирует поствиксную запись лексем
+	// Generates a postfix entry of tokens
 	void GenerationPostForm();
 
-	// Копирует другой объект типа Arithmetic
+	// Copies another object of the Arithmetic type
 	void CopyOther(const Arithmetic& other);
 
 public:
-	// +-+-+-+-+-+-+-+-+ Конструкторы +-+-+-+-+-+-+-+-+
+	// +-+-+-+-+-+-+-+-+ Constructors +-+-+-+-+-+-+-+-+
 
 	Arithmetic() {}
 	Arithmetic(const std::string& str);
@@ -39,50 +38,50 @@ public:
 
 
 
-	// +-+-+-+-+-+-+-+-+ Методы (геттеры) +-+-+-+-+-+-+-+-+
+	// +-+-+-+-+-+-+-+-+ Methods (getters) +-+-+-+-+-+-+-+-+
 
-	// Возвращает "обратную польскую запись"
+	// Returns "reverse Polish entry"
 	std::string GetPolStr() const noexcept;
 
-	// Возвращает исходную переданную строку
+	// Returns the original passed string
 	std::string GetSrcStr() const noexcept;
 
-	// Возвращает результат вычисления
+	// Returns the result of the calculation
 	double GetResult() const noexcept;
 
-	// Возвращает значение определенной переменной
+	// Returns the value of a specific variable
 	double GetValVar(const std::string& name);
 
-	// Возвращает константкую ссылку на таблицу с переменными и их значениями
+	// Returns a constant reference to a table with variables and their values
 	const std::map<std::string, double>& GetTableVar() const noexcept;
 
 
 
 
-	// +-+-+-+-+-+-+-+-+ Сеттер +-+-+-+-+-+-+-+-+
+	// +-+-+-+-+-+-+-+-+ Setter +-+-+-+-+-+-+-+-+
 
-	// Изменяет значение переменной из таблицы
+	// Changes the value of a variable from the table
 	void SetValVar(std::string name, double value);
 
 
 
 
-	// +-+-+-+-+-+-+-+-+ Прочие методы +-+-+-+-+-+-+-+-+
+	// +-+-+-+-+-+-+-+-+ Other methods +-+-+-+-+-+-+-+-+
 
-	// Вычисляет результат выражения
+	// Calculates the result of the expression
 	void Calculation();
 
-	// Выводит переменные и их значения в консоль (логи)
+	// Outputs variables and their values to the console (logs)
 	void ShowTableVar() const noexcept;
 
 
 
 
-	// +-+-+-+-+-+-+-+-+ Операторы +-+-+-+-+-+-+-+-+
+	// +-+-+-+-+-+-+-+-+ Operators +-+-+-+-+-+-+-+-+
 
 	Arithmetic& operator = (const Arithmetic& other);
 	Arithmetic& operator = (const std::string& str);
 };
 
 
-#endif // !CALCULATOR_HPP
+#endif // CALCULATOR_HPP

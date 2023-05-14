@@ -8,7 +8,7 @@
 
 
 
-// Проверяет на корректность круглые скобки
+// Checks for the correctness of parentheses
 bool CheckingParentheses(const std::string& str);
 
 
@@ -21,20 +21,18 @@ private:
 	std::vector<std::string> strTokens;
 	std::vector<Token> tokens{};
 
-private:
-	// +-+-+-+-+-+-+-+-+ Приватные методы +-+-+-+-+-+-+-+-+
-	
-	// Разделяет исходную строку на лексемы
+private:	
+	// Splits the source string into tokens
 	void SplitOnTokens(const std::string& str);
 
-	// Определяет типы лексем
+	// Defines the types of tokens
 	void DefiningTypes();
 
-	// Проверяет корректность введенного выражения
+	// Checks the correctness of the entered expression
 	void CheckingCorrect();
 
 public:
-	// +-+-+-+-+-+-+-+-+ Конструкторы +-+-+-+-+-+-+-+-+
+	// +-+-+-+-+-+-+-+-+ Constructors +-+-+-+-+-+-+-+-+
 
 	Record() {}
 	Record(const std::string& str);
@@ -42,25 +40,22 @@ public:
 
 
 
-	// +-+-+-+-+-+-+-+-+ Методы (геттеры) +-+-+-+-+-+-+-+-+
+	// +-+-+-+-+-+-+-+-+ Methods (getters) +-+-+-+-+-+-+-+-+
 	 
-	// Возвращает количество лексем в записи
+	// Returns the number of tokens in the record
 	size_t GetCount() const noexcept;
 
-	// Возвращает исходную переданную строку
+	// Returns the original passed string
 	std::string  GetSrcStr() const noexcept;
 
 
 
 
-	// +-+-+-+-+-+-+-+-+ Операторы +-+-+-+-+-+-+-+-+
+	// +-+-+-+-+-+-+-+-+ Operators +-+-+-+-+-+-+-+-+
 
 	Record& operator = (const Record& other);
 	Record& operator = (const std::string& str);
 	Token& operator [] (const size_t& pos);
 };
-
-
-
 
 #endif // RECORD_HPP
