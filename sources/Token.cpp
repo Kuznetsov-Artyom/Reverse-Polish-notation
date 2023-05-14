@@ -2,7 +2,7 @@
 
 
 
-// Проверяет лексему на тип CONST
+// Checks the token for the CONST type
 bool IsConst(std::string token)
 {
 	if (token.front() == '.' || token.back() == '.') return false;
@@ -25,7 +25,7 @@ bool IsConst(std::string token)
 
 }
 
-// Проверяет лексему на тип VARIABLE
+// Checks the token for the VARIABLE type
 bool IsVariable(std::string token)
 {
 	if (isdigit(token[0])) return false;
@@ -36,7 +36,7 @@ bool IsVariable(std::string token)
 	return true;
 }
 
-// Проверяет лексему на тип OPERATION
+// Checks the token for the OPERATION type
 bool IsOperation(std::string token)
 {
 	if (token.size() > 1) return false;
@@ -48,7 +48,7 @@ bool IsOperation(std::string token)
 	return false;
 }
 
-// Проверяет лексему на тип OPEN_BRACKET
+// Checks the token for the OPEN_BRACKET type
 bool IsOpenBracket(std::string token)
 {
 	if (token.size() > 1) return false;
@@ -56,7 +56,7 @@ bool IsOpenBracket(std::string token)
 	return token[0] == '(';
 }
 
-// Проверяет лексему на тип CLOSE_BRACKET
+// Checks the token for the CLOSE_BRACKET type
 bool IsCloseBracket(std::string token)
 {
 	if (token.size() > 1) return false;
