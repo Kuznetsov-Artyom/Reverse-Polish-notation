@@ -9,7 +9,6 @@
 #include <cmath>
 
 
-
 class Arithmetic
 {
 private:
@@ -37,7 +36,6 @@ public:
 	~Arithmetic() {}
 
 
-
 	// +-+-+-+-+-+-+-+-+ Methods (getters) +-+-+-+-+-+-+-+-+
 
 	// Returns "reverse Polish entry"
@@ -56,14 +54,10 @@ public:
 	const std::map<std::string, double>& GetTableVar() const noexcept;
 
 
-
-
 	// +-+-+-+-+-+-+-+-+ Setter +-+-+-+-+-+-+-+-+
 
 	// Changes the value of a variable from the table
 	void SetValVar(std::string name, double value);
-
-
 
 
 	// +-+-+-+-+-+-+-+-+ Other methods +-+-+-+-+-+-+-+-+
@@ -73,8 +67,6 @@ public:
 
 	// Outputs variables and their values to the console (logs)
 	void ShowTableVar() const noexcept;
-
-
 
 
 	// +-+-+-+-+-+-+-+-+ Operators +-+-+-+-+-+-+-+-+

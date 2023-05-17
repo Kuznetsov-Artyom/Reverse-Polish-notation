@@ -77,8 +77,6 @@ void Arithmetic::CopyOther(const Arithmetic& other)
 }
 
 
-
-
 // +-+-+-+-+-+-+-+-+ Constructors +-+-+-+-+-+-+-+-+
 
 Arithmetic::Arithmetic(const std::string& str) : tokens{ str }
@@ -87,8 +85,6 @@ Arithmetic::Arithmetic(const std::string& str) : tokens{ str }
 	Calculation();
 }
 Arithmetic::Arithmetic(const Arithmetic& other) { CopyOther(other); }
-
-
 
 
 // +-+-+-+-+-+-+-+-+ Methods (getters) +-+-+-+-+-+-+-+-+
@@ -118,8 +114,6 @@ const std::map<std::string, double>& Arithmetic::GetTableVar() const noexcept
 }
 
 
-
-
 // +-+-+-+-+-+-+-+-+ Setter +-+-+-+-+-+-+-+-+
 
 // Changes the value of a variable from the table
@@ -130,8 +124,6 @@ void Arithmetic::SetValVar(std::string name, double value)
 
 	tableVariable[name] = value;
 }
-
-
 
 
 // +-+-+-+-+-+-+-+-+ Other methods +-+-+-+-+-+-+-+-+
@@ -208,8 +200,6 @@ void Arithmetic::ShowTableVar() const noexcept
 }
 
 
-
-
 // +-+-+-+-+-+-+-+-+ Operators +-+-+-+-+-+-+-+-+
 
 Arithmetic& Arithmetic::operator = (const Arithmetic& other)
@@ -229,6 +219,3 @@ Arithmetic& Arithmetic::operator = (const std::string& str)
 
 	return *this;
 }
-
-
-

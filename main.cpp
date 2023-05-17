@@ -3,13 +3,6 @@
 #include <limits>
 
 
-
-
-
-
-
-
-
 int main()
 {
 	while (true)

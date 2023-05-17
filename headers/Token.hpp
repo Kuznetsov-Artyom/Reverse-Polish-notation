@@ -7,8 +7,6 @@
 #include <cctype>
 
 
-
-
 // Possible variants of tokens
 enum class TypeToken
 {
@@ -21,8 +19,6 @@ enum class TypeToken
 };
 
 
-
-
 // Operator arity
 enum class Arity
 {
@@ -30,8 +26,6 @@ enum class Arity
 	UNARY = 1,
 	BINARY = 2
 };
-
-
 
 
 // The structure describing the token
@@ -49,7 +43,6 @@ struct Token
 };
 
 
-
 // Checks the token for the CONST type
 bool IsConst(std::string token);
 
@@ -64,7 +57,6 @@ bool IsOpenBracket(std::string token);
 
 // Checks the token for the CLOSE_BRACKET type
 bool IsCloseBracket(std::string token);
-
 
 
 #endif // TOKEN_HPP

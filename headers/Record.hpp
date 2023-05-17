@@ -6,12 +6,8 @@
 #include "ExceptionRecord.hpp"
 
 
-
-
 // Checks for the correctness of parentheses
 bool CheckingParentheses(const std::string& str);
-
-
 
 
 class Record
@@ -39,7 +35,6 @@ public:
 	Record(const Record& other);
 
 
-
 	// +-+-+-+-+-+-+-+-+ Methods (getters) +-+-+-+-+-+-+-+-+
 	 
 	// Returns the number of tokens in the record
@@ -47,8 +42,6 @@ public:
 
 	// Returns the original passed string
 	std::string  GetSrcStr() const noexcept;
-
-
 
 
 	// +-+-+-+-+-+-+-+-+ Operators +-+-+-+-+-+-+-+-+

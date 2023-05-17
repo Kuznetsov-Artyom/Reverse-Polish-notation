@@ -1,7 +1,6 @@
 #include "Record.hpp"
 
 
-
 // Checks for the correctness of parentheses
 bool CheckingParentheses(const std::string& str)
 {
@@ -15,9 +14,6 @@ bool CheckingParentheses(const std::string& str)
 
 	return result == 0;
 }
-
-
-
 
 
 // Splits the source string into tokens
@@ -162,8 +158,6 @@ void Record::CheckingCorrect()
 }
 
 
-
-
 // +-+-+-+-+-+-+-+-+ Constructors +-+-+-+-+-+-+-+-+
 
 Record::Record(const std::string& str) : srcStr{ str }
@@ -180,8 +174,6 @@ Record::Record(const std::string& str) : srcStr{ str }
 Record::Record(const Record& other) : srcStr(other.srcStr), tokens{ other.tokens } {}
 
 
-
-
 // +-+-+-+-+-+-+-+-+ Methods (getters) +-+-+-+-+-+-+-+-+
 
 // Returns the number of tokens in the record
@@ -189,8 +181,6 @@ size_t Record::GetCount() const noexcept { return tokens.size(); }
 
 // Returns the original passed string
 std::string  Record::GetSrcStr() const noexcept { return srcStr; }
-
-
 
 
 // +-+-+-+-+-+-+-+-+ Operators +-+-+-+-+-+-+-+-+

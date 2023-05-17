@@ -1,7 +1,6 @@
 #include "Token.hpp"
 
 
-
 // Checks the token for the CONST type
 bool IsConst(std::string token)
 {
@@ -21,8 +20,6 @@ bool IsConst(std::string token)
 	}
 
 	return true;
-
-
 }
 
 // Checks the token for the VARIABLE type
